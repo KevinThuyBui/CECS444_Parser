@@ -4,13 +4,19 @@ import Symbols.Symbol;
 import Tokens.Token;
 
 public class PstLeafNode extends PstNode {
+    private Token token;
 
     public PstLeafNode(Symbol symbol, Token token) {
-        super(symbol,token);
+        super(symbol);
+        this.token = token;
     }
 
     public boolean isEpsilon() {
         return false;
+    }
+
+    public Token getToken() {
+        return token;
     }
 
     @Override

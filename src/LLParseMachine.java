@@ -67,7 +67,7 @@ public class LLParseMachine {
             }
         }
         serializeTree(pstRoot);
-        pst2ast(pstRoot);
+        pst2ast(pstRoot, null);
         serializeTree(pstRoot);
     }
 
@@ -129,17 +129,17 @@ public class LLParseMachine {
 
     }
 
-    private void pst2ast (PstNode node) {
+    private void pst2ast (PstNode node, PstInnerNode parent) {
         if (node instanceof PstInnerNode) {
             for (PstNode kid : ((PstInnerNode) node).getChildren()) {
-                pst2ast(kid);
+                pst2ast(kid, (PstInnerNode) node);
             }
-            convertNode((PstInnerNode) node);
+            convertNode((PstInnerNode) node, parent);
         }
         //no else needed, leaf nodes get converted while the parent node is handled
     }
 
-    private void convertNode(PstInnerNode node) {
+    private void convertNode(PstInnerNode node, PstInnerNode parent) {
         switch (node.getRuleId()) {
             case 1:
                 P2aRules.rule1(node);
@@ -148,7 +148,7 @@ public class LLParseMachine {
                 P2aRules.rule2(node);
                 break;
             case 3:
-                P2aRules.rule3(node);
+                P2aRules.rule3(node, parent);
                 break;
             case 5:
                 P2aRules.rule5(node);
@@ -163,7 +163,7 @@ public class LLParseMachine {
                 P2aRules.rule68(node);
                 break;
             case 131:
-                P2aRules.rule131(node);
+                P2aRules.rule131(node, parent);
             default:
                 //TODO throw error
         }

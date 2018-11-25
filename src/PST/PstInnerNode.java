@@ -2,30 +2,25 @@ package PST;
 
 import Symbols.Symbol;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PstInnerNode extends PstNode {
     private ArrayList<PstNode> children;
     private int rule;
-    private boolean isEpsilon;
 
     public PstInnerNode(Symbol symbol, int ruleID) {
         super(symbol);
         this.rule = ruleID;
         children = new ArrayList<>();
-        isEpsilon = false;
     }
 
     public PstInnerNode(Symbol symbol) {
         this(symbol, 0);
     }
 
-    public void setEpsilon(boolean epsilon) {
-        isEpsilon = epsilon;
-    }
-
     public boolean isEpsilon() {
-        return isEpsilon;
+        return getChildCount() == 0;
     }
 
     public void addChild(PstNode child) {
@@ -48,6 +43,10 @@ public class PstInnerNode extends PstNode {
         children.remove(id);
     }
 
+    public void removeAllChildren() {
+        children = new ArrayList<>();
+    }
+
     public void setRule(int id) {
         rule = id;
     }
@@ -62,10 +61,14 @@ public class PstInnerNode extends PstNode {
 
     public void copyFrom(PstNode sourceNode) {
         setSymbol(sourceNode.getSymbol());
-        if (sourceNode.getToken() != null) {
-            setToken(sourceNode.getToken());
+        if (sourceNode instanceof PstInnerNode) {
+            setRule(((PstInnerNode) sourceNode).getRuleId());
         }
         //TODO potentially copy other stuff that isn't implemented yet
+    }
+
+    public void replaceChild(PstInnerNode oldChild, PstLeafNode newChild) {
+        Collections.replaceAll(children, oldChild, newChild);
     }
 
     @Override

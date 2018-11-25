@@ -1,5 +1,7 @@
 import PST.*;
 
+import java.util.Optional;
+
 public class P2aRules {
 
     private P2aRules() {
@@ -8,20 +10,20 @@ public class P2aRules {
 
     // Pgm = kwdprog Vargroup Fcndefs Main
     public static void rule1(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(0,node);
+        //removeEpsilonKids(node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Main = kwdmain BBlock
     public static void rule2(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // BBlock = brace1 Vargroup Stmts brace2
-    public static void rule3(PstInnerNode node) {
-        removeEpsilonKids(node);
+    public static void rule3(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
         node.removeChild(node.getChildCount()-1); //remove brace2 which is always the last child
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.of(parent));
     }
 
     // Vargroup = kwdvars PPvarlist
@@ -31,12 +33,7 @@ public class P2aRules {
 
     // Vargroup = eps
     public static void rule5(PstInnerNode node) {
-        node.setEpsilon(true);
-    }
-
-    // PPvarlist = parens1 Varlist parens2
-    public static void rule6(PstNode node) {
-        //TODO implement this
+        node.removeAllChildren();
     }
 
     // PPvarlist = parens1 Varlist parens2
@@ -51,7 +48,7 @@ public class P2aRules {
 
     // Varlist = eps
     public static void rule8(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Varitem = Vardecl VaritemT
@@ -71,7 +68,7 @@ public class P2aRules {
 
     // VaritemT = eps
     public static void rule12(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Vardecl = Simplekind Varspec
@@ -126,7 +123,7 @@ public class P2aRules {
 
     // VarspecT = eps
     public static void rule23(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Varid = id
@@ -186,7 +183,7 @@ public class P2aRules {
 
     // Moreexprs = eps
     public static void rule35(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Classdecl = kwdclass Classid ClassdeclT
@@ -196,7 +193,7 @@ public class P2aRules {
 
     // ClassdeclT = eps
     public static void rule37(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // ClassdeclT = Classmom Interfaces BBclassitems
@@ -216,7 +213,7 @@ public class P2aRules {
 
     // Classmom = eps
     public static void rule41(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Classitems = Classgroup Classitems
@@ -226,7 +223,7 @@ public class P2aRules {
 
     // Classitems = eps
     public static void rule43(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Classgroup = Class_ctrl
@@ -256,7 +253,7 @@ public class P2aRules {
 
     // Interfaces = eps
     public static void rule49(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Mddecls = Mdheader Mddecls
@@ -266,7 +263,7 @@ public class P2aRules {
 
     // Mddecls = eps
     public static void rule51(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Mdheader = kwdfcn Md_id PParmlist Retkind
@@ -286,7 +283,7 @@ public class P2aRules {
 
     // Fcndefs = eps
     public static void rule55(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Fcndef = Fcnheader BBlock
@@ -335,7 +332,7 @@ public class P2aRules {
 
     // More_varspecs = eps
     public static void rule65(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // PPonly = parens1 parens2
@@ -344,14 +341,14 @@ public class P2aRules {
     }
 
     // Stmts = Stmt semi Stmts
-    public static void rule67(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(1, node);
+    public static void rule67(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
+        hoistKid(1, node, Optional.of(parent));
     }
 
     // Stmts = eps
     public static void rule68(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Stmt = Stasgn
@@ -385,9 +382,9 @@ public class P2aRules {
     }
 
     // Stmt = Deref_id equal Expr
-    public static void rule75(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(1, node);
+    public static void rule75(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
+        hoistKid(1, node, Optional.of(parent));
     }
 
     // Stmt = id StmtT
@@ -406,15 +403,15 @@ public class P2aRules {
     }
 
     // Stasgn = Lval equal Expr
-    public static void rule79(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(1, node);
+    public static void rule79(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
+        hoistKid(1, node, Optional.of(parent));
     }
 
     // Lval = id LvalT
-    public static void rule80(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(0, node);
+    public static void rule80(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
+        hoistKid(0, node, Optional.of(parent));
     }
 
     // Lval = Deref_id
@@ -424,7 +421,7 @@ public class P2aRules {
 
     // LvalT = eps
     public static void rule82(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // LvalT = KKexpr
@@ -433,9 +430,9 @@ public class P2aRules {
     }
 
     // KKexpr = bracket1 Expr bracket2
-    public static void rule84(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(0, node);
+    public static void rule84(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
+        hoistKid(0, node, Optional.of(parent));
     }
 
     // Fcall = Fcnid PPexprs
@@ -445,7 +442,7 @@ public class P2aRules {
 
     // PPexprs = parens1 PPexprsT
     public static void rule86(PstInnerNode node) {
-        hoistKid(0, node);
+        hoistKid(0, node,Optional.empty());
     }
 
     // PPexprsT = Exprlist parens2
@@ -455,39 +452,39 @@ public class P2aRules {
 
     // PPexprsT = parens2
     public static void rule88(PstInnerNode node) {
-        hoistKid(0, node);
+        hoistKid(0, node,Optional.empty());
     }
 
     // Stif = kwdif PPexpr BBlock Elsepart
-    public static void rule89(PstInnerNode node){
-        removeEpsilonKids(node);
-        hoistKid(0,node);
+    public static void rule89(PstInnerNode node, PstInnerNode parent){
+        //removeEpsilonKids(node);
+        hoistKid(0,node,Optional.of(parent));
     }
 
     // Elsepart = kwdelseif PPexpr BBlock Elsepart
-    public static void rule90(PstInnerNode node){
-        removeEpsilonKids(node);
-        hoistKid(0, node);
+    public static void rule90(PstInnerNode node, PstInnerNode parent){
+        //removeEpsilonKids(node);
+        hoistKid(0, node,Optional.of(parent));
     }
 
     // Elsepart = kwdelse BBlock
     public static void rule91(PstInnerNode node){
-        hoistKid(0, node);
+        hoistKid(0, node,Optional.empty());
     }
 
     // Elsepart = eps
     public static void rule92(PstInnerNode node){
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Stwhile = kwdwhile PPexpr BBlock
     public static void rule93(PstInnerNode node){
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Stprint = kprint PPexprs
     public static void rule94(PstInnerNode node){
-        hoistKid(0, node);
+        hoistKid(0, node,Optional.empty());
     }
 
     // Strtn = kwdreturn StrtnT
@@ -586,108 +583,116 @@ public class P2aRules {
     }
 
     // FactT = PPexprs
-    public static void rule114(PstInnerNode node) {
-        removeEpsilonKids(node);
+    public static void rule114(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
         node.removeChild(node.getChildCount()-1); //remove brace2 which is always the last child
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.of(parent));
     }
 
     // FactT = KKexpr
-    public static void rule115(PstInnerNode node) {
-        removeEpsilonKids(node);
+    public static void rule115(PstInnerNode node, PstInnerNode parent) {
+        //removeEpsilonKids(node);
         node.removeChild(node.getChildCount()-1); //remove bracket2 which is always the last child
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.of(parent));
     }
 
     // FactT = eps
     public static void rule116(PstInnerNode node) {
-        node.setEpsilon(true);
+        node.removeAllChildren();
     }
 
     // Addrof_id = ampersand id
     public static void rule117(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Oprel = opeq
     public static void rule118(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Oprel = opne
     public static void rule119(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Oprel = Lthan
     public static void rule120(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Oprel = ople
     public static void rule121(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Oprel = opge
     public static void rule122(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Oprel = Gthan
     public static void rule123(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Lthan = angle1
     public static void rule124(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Gthan = angle2
     public static void rule125(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Opadd = plus
     public static void rule126(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Opadd = minus
     public static void rule127(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Opmul = aster
     public static void rule128(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Opmul = slash
     public static void rule129(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // Opmul = caret
     public static void rule130(PstInnerNode node) {
-        hoistKid(0,node);
+        hoistKid(0,node,Optional.empty());
     }
 
     // StmtT = equal Expr
-    public static void rule131(PstInnerNode node) {
-        removeEpsilonKids(node);
-        hoistKid(0,node);
+    public static void rule131(PstInnerNode node, PstInnerNode parent) {
+        ////removeEpsilonKids(node);
+        hoistKid(0,node,Optional.of(parent));
     }
 
     private static void removeEpsilonKids(PstInnerNode node) {
         node.getChildren().removeIf(PstNode::isEpsilon);
     }
 
-    private static void hoistKid(int id, PstInnerNode node) {
+    private static void hoistKid(int id, PstInnerNode node, Optional<PstInnerNode> parent) {
+        removeEpsilonKids(node);
         PstNode kid = node.getChild(id);
-        node.copyFrom(kid);
         node.removeChild(kid);
+        if (node.isEpsilon()) {
+            convertToLeaf(node,(PstLeafNode) kid, parent.get());
+        } else {
+            node.copyFrom(kid);
+        }
+    }
 
+    private static void convertToLeaf(PstInnerNode node, PstLeafNode kid, PstInnerNode parent) {
+        parent.replaceChild(node, kid);
     }
 }
